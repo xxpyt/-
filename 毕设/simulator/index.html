@@ -1,0 +1,115 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>数字频带通信系统仿真器</title>
+  <link rel="stylesheet" href="./styles.css" />
+</head>
+<body>
+  <main class="container">
+    <h1>数字频带通信系统仿真器</h1>
+    <p class="subtitle">支持 ASK / FSK / BPSK / DPSK 的仿真、理论对照、导入数据评估与报告导出</p>
+
+    <section class="panel">
+      <h2>基础参数</h2>
+      <div class="grid">
+        <label>比特数
+          <input id="bitCount" type="number" min="100" max="500000" step="100" value="5000" />
+        </label>
+        <label>每码元采样点
+          <input id="samplesPerSymbol" type="number" min="8" max="256" step="1" value="40" />
+        </label>
+        <label>载波周期/码元
+          <input id="carrierCycles" type="number" min="1" max="20" step="1" value="4" />
+        </label>
+        <label>FSK 低频周期/码元
+          <input id="fskCycles0" type="number" min="1" max="20" step="1" value="3" />
+        </label>
+        <label>FSK 高频周期/码元
+          <input id="fskCycles1" type="number" min="1" max="20" step="1" value="5" />
+        </label>
+        <label>每点重复次数
+          <input id="trials" type="number" min="1" max="30" step="1" value="5" />
+        </label>
+        <label>随机种子（可复现）
+          <input id="seed" type="number" min="1" max="2147483646" step="1" value="20260506" />
+        </label>
+      </div>
+    </section>
+
+    <section class="panel">
+      <h2>单次仿真</h2>
+      <div class="grid">
+        <label>调制方式
+          <select id="singleMod">
+            <option>ASK</option>
+            <option>FSK</option>
+            <option>BPSK</option>
+            <option>DPSK</option>
+          </select>
+        </label>
+        <label>SNR(dB)
+          <input id="singleSnr" type="number" min="-5" max="40" step="1" value="8" />
+        </label>
+      </div>
+      <button id="runSingle">运行单次仿真</button>
+      <div id="singleResult" class="result">等待运行...</div>
+    </section>
+
+    <section class="panel">
+      <h2>BER 扫频对比</h2>
+      <div class="grid">
+        <label>SNR 起点(dB)
+          <input id="snrStart" type="number" min="-5" max="40" step="1" value="0" />
+        </label>
+        <label>SNR 终点(dB)
+          <input id="snrEnd" type="number" min="-5" max="40" step="1" value="20" />
+        </label>
+        <label>SNR 步长(dB)
+          <input id="snrStep" type="number" min="1" max="10" step="1" value="2" />
+        </label>
+      </div>
+      <div class="actions">
+        <button id="runSweep">运行 BER 对比</button>
+        <button id="exportCsv" disabled>导出 BER CSV</button>
+        <button id="exportReport" disabled>导出实验报告</button>
+      </div>
+      <div id="sweepResult" class="result">等待运行...</div>
+    </section>
+
+    <section class="panel">
+      <h2>导入实测数据评估</h2>
+      <div class="grid">
+        <label>调制方式
+          <select id="importMod">
+            <option>ASK</option>
+            <option>FSK</option>
+            <option>BPSK</option>
+            <option>DPSK</option>
+          </select>
+        </label>
+        <label>发送比特 CSV
+          <input id="txBitsFile" type="file" accept=".csv,.txt" />
+        </label>
+        <label>接收采样 CSV
+          <input id="rxSamplesFile" type="file" accept=".csv,.txt" />
+        </label>
+      </div>
+      <button id="runImported">用导入数据评估 BER</button>
+      <div id="importResult" class="result">等待导入...</div>
+      <p class="subtitle">格式说明：发送比特为 0/1 序列；接收采样为逗号或换行分隔的浮点数。</p>
+    </section>
+
+    <section class="panel">
+      <h2>波形与曲线</h2>
+      <canvas id="txCanvas" width="960" height="180"></canvas>
+      <canvas id="rxCanvas" width="960" height="180"></canvas>
+      <canvas id="demodCanvas" width="960" height="180"></canvas>
+      <canvas id="berCanvas" width="960" height="340"></canvas>
+    </section>
+  </main>
+
+  <script src="./app.js"></script>
+</body>
+</html>

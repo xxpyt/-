@@ -1,0 +1,5 @@
+[build]
+  publish = "simulator"
+
+[build.environment]
+  NODE_VERSION = "20"
